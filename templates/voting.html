@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% block title %}{{ config.SITE_NAME }} | Eleição temática{% endblock %}
+
+    <section class="voting-section" id="registroSecao" style="display: none;">
+        <div class="voting-card">
+            <h2>Registrar eleitor</h2>
+            <p class="section-description">Insira seu nome e gere ou cole o token da votação</p>
+            
+            <div class="form-group">
+                <label for="nomeEleitor">Nome do Eleitor</label>
+                <input type="text" id="nomeEleitor" placeholder="Digite o nome completo" required />
+            </div>
+
+            <div class="token-section">
+                <div class="form-group">
+                    <label for="tokenInput">Token de Votação</label>
+                    <input type="text" id="tokenInput" placeholder="Token gerado automaticamente ou colado" readonly />
+                </div>
+                
+                <div class="token-generator">
+                    <h4>Gerador de Token</h4>
+                    <div class="generator-controls">
+                        <div class="form-group">
+                            <label for="tokenLength">Tamanho: <span id="lengthValue">18</span></label>
+                            <input type="range" id="tokenLength" min="8" max="32" value="18" />
+                        </div>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" id="tokenUpper" checked /> Maiúsculas</label>
+                            <label><input type="checkbox" id="tokenLower" checked /> Minúsculas</label>
+                            <label><input type="checkbox" id="tokenNumbers" checked /> Números</label>
+                            <label><input type="checkbox" id="tokenSymbols" /> Símbolos</label>
+                        </div>
+                        <button id="generateToken" class="button button-primary">Gerar Token</button>
+                    </div>
+                </div>
+
+                <button id="copyToken" class="button button-secondary">Copiar</button>
+            </div>
+
+            <button id="proceedVoting" class="button button-primary full-width" style="margin-top: 20px;">
+                Prosseguir para Votação
+            </button>
+        </div>
+    </section>
+
+    <section class="voting-section" id="filaSeccao">
+        <div class="queue-container">
+            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=85" 
+                 alt="Fila de votação" 
+                 class="queue-image" 
+                 style="filter: blur(6px);" />
+            <div class="queue-overlay">
+                <h2>Eleição do Crônicas</h2>
+                <p>Prepare-se para votar entre os personagens de Touhou Project</p>
+                <button id="enterVoting" class="button button-primary large">Começar a Votar</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="voting-section" id="bancoSecao" style="display: none;">
+        <div class="banco-container">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=85" 
+                 alt="Seção de votação" 
+                 class="banco-image"
+                 style="filter: blur(8px);" />
+            <div class="banco-form">
+                <h3>Seção eleitoral</h3>
+                <div class="form-group">
+                    <label for="nomeRegistro">Nome</label>
+                    <input type="text" id="nomeRegistro" placeholder="Digite seu nome" required />
+                </div>
+                <div class="form-group">
+                    <label for="tokenRegistro">Token</label>
+                    <input type="text" id="tokenRegistro" placeholder="Cole seu token aqui" required />
+                </div>
+                <button id="confirmRegistro" class="button button-primary">Confirmar</button>
+                <button id="backToQueue" class="button button-secondary">Voltar</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="voting-section" id="urvnSecao" style="display: none;">
+        <div class="urna-container">
+            <div class="urna-audio" aria-hidden="true">
+                <audio id="urnaTeclaAudio" preload="auto">
+                    <source src="https://cdn.discordapp.com/attachments/1079485209227046993/1544795829913526362/urna-tecla.mp3?ex=6a99ceba&amp;is=6a987d3a&amp;hm=6ad6a2a407913705198ff66db6fedc76be7a27bc3872e8054d4e6c2ac047eeb6&amp;" type="audio/mpeg" />
+                </audio>
+                <audio id="urnaVotoAudio" preload="auto">
+                    <source src="https://cdn.discordapp.com/attachments/1079485209227046993/1544795830316441600/urna-voto.mp3?ex=6a99ceba&amp;is=6a987d3a&amp;hm=a6b7f764cb3bd5ec039527ec97ed52bcc252ab5b777271889f9df6327e19cdff&amp;" type="audio/mpeg" />
+                </audio>
+            </div>
+            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=85" 
+                 alt="Cabine de votação" 
+                 class="urna-background"
+                 style="filter: blur(4px);" />
+            
+            <div class="urna-content">
+                <h2>Urna eletrônica do Crônicas</h2>
+                <div class="candidate-notice">
+                    <p id="voteStage">Etapa 1 de 2: escolha o candidato à Presidência.</p>
+                    <p>Confirme apenas quando tiver certeza do seu voto.</p>
+                </div>
+                <div class="candidates-grid">
+                    <!-- Presidência -->
+                    <div class="candidate-section" id="presidenciaSection">
+                        <h3>Presidência</h3>
+                        <div class="candidates-row">
+                            <button class="candidate-card is-provisional" data-candidate-number="13">
+                                <span class="party-label">PT</span>
+                                <span class="candidate-pair"><img src="{{ url_for('static', filename='suika.png') }}" alt="Suika" /><img src="{{ url_for('static', filename='yuugi.png') }}" alt="Yuugi" /></span>
+                                <span class="candidate-number">13</span><span class="candidate-name">Suika / Yuugi</span>
+                            </button>
+                            <button class="candidate-card is-provisional" data-candidate-number="14">
+                                <span class="party-label">MBL</span>
+                                <span class="candidate-pair"><img src="{{ url_for('static', filename='miko.png') }}" alt="Miko" /><img src="{{ url_for('static', filename='shou.png') }}" alt="Shou" /></span>
+                                <span class="candidate-number">14</span><span class="candidate-name">Miko / Shou</span>
+                            </button>
+                            <button class="candidate-card is-provisional" data-candidate-number="22">
+                                <span class="party-label">PL</span>
+                                <span class="candidate-pair single-image"><img src="{{ url_for('static', filename='reimu-marisa.png') }}" alt="Reimu e Marisa" /></span>
+                                <span class="candidate-number">22</span><span class="candidate-name">Reimu / Marisa</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Governador -->
+                    <div class="candidate-section" id="governadorSection" style="display: none;">
+                        <h3>Governador da Vila Humana</h3>
+                        <div class="candidates-row">
+                            <button class="candidate-card is-provisional" data-candidate-number="1399">
+                                <span class="party-label">PT</span>
+                                <span class="candidate-pair"><img src="{{ url_for('static', filename='cirno-sunny-star-luna.png') }}" alt="Cirno" /><img src="{{ url_for('static', filename='governador-pt.png') }}" alt="Sunny Milk, Star Sapphire e Luna Child" /></span>
+                                <span class="candidate-number">1399</span><span class="candidate-name">Cirno, Sunny Milk, Star Sapphire, Luna Child</span>
+                            </button>
+                            <button class="candidate-card is-provisional" data-candidate-number="1400">
+                                <span class="party-label">MBL</span>
+                                <span class="candidate-pair single-image"><img src="{{ url_for('static', filename='clownpiece.png') }}" alt="Clownpiece" /></span>
+                                <span class="candidate-number">1400</span><span class="candidate-name">Clownpiece</span>
+                            </button>
+                            <button class="candidate-card is-provisional" data-candidate-number="2222">
+                                <span class="party-label">PL</span>
+                                <span class="candidate-pair single-image"><img src="{{ url_for('static', filename='suwako.png') }}" alt="Suwako" /></span>
+                                <span class="candidate-number">2222</span><span class="candidate-name">Suwako</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="urna-display">
+                    <div class="display-item">
+                        <label>Número digitado:</label>
+                        <input type="text" id="votoNumero" readonly placeholder="Nenhum número digitado" />
+                    </div>
+                    <div id="candidatePreview" class="candidate-preview" aria-live="polite" hidden>
+                    </div>
+                    <div class="display-buttons">
+                        <button id="confirmarVoto" class="button button-primary">Confirmar Voto</button>
+                        <button id="limparVoto" class="button button-secondary">Limpar</button>
+                        <button id="corrigirVoto" class="button button-secondary">Corrigir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="voting-section" id="confirmacaoSecao" style="display: none;">
+        <div class="confirmation-card">
+            <h2>Obrigado por votar</h2>
+            <button id="voltarAoInicio" class="button button-primary">Voltar ao Início</button>
+        </div>
+    </section>
+
+    <script src="{{ url_for('static', filename='voting.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ config.SITE_NAME }} | Resultados{% endblock %}
+
+{% block content %}
+<section class="results-page">
+    <h1>Apuração em tempo real</h1>
+    <p class="section-description">Resultados demonstrativos atualizados automaticamente.</p>
+    <div id="resultsStatus" class="candidate-notice">Carregando resultados...</div>
+    <div class="results-grid">
+        <section>
+            <h2>Presidência</h2>
+            <div id="presidenciaResults"></div>
+        </section>
+        <section>
+            <h2>Governador da Vila Humana</h2>
+            <div id="governadorResults"></div>
+        </section>
+    </div>
+</section>
+<script src="{{ url_for('static', filename='results.js') }}"></script>
+{% endblock %}

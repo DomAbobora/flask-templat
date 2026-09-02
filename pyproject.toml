@@ -1,0 +1,13 @@
+[project]
+name = "eleicoes-gensokyo"
+version = "0.1.0"
+description = "Site demonstrativo de votação temática."
+
+readme = "README.md"
+requires-python = ">=3.10"
+
+[project.dependencies]
+dependencies = ["flask"]
+
+[project.optional-dependencies]
+dev = ["pytest"]

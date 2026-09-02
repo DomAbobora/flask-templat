@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>{% block title %}{{ config.SITE_NAME }}{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='site.css')}}" />
+    </head>
+
+    <body>
+        <div class="government-banner">Portal temático do Crônicas • projeto demonstrativo sem vínculo com o Governo Federal ou com a Justiça Eleitoral</div>
+        <header class="navbar">
+            <div class="nav-inner">
+                <a href="{{ url_for('home') }}" class="navbar-brand">
+                    <span class="brand-mark">東</span>
+                    <span>{{ config.SITE_NAME }}</span>
+                </a>
+                <nav aria-label="Navegacao principal">
+                    <a href="{{ url_for('home') }}" class="navbar-item">Inicio</a>
+                    <a href="{{ url_for('about') }}" class="navbar-item">Sobre</a>
+                    <a href="{{ url_for('blog') }}" class="navbar-item">{{ config.BLOG_NAME }}</a>
+                    <a href="{{ url_for('voting') }}" class="navbar-item">Votação</a>
+                    <a href="{{ url_for('results') }}" class="navbar-item">Resultados</a>
+                    <a href="{{ url_for('voting') }}" class="nav-order">Ir votar</a>
+                </nav>
+                <button id="muteToggle" type="button" class="audio-toggle" aria-pressed="false">Mutar música</button>
+            </div>
+        </header>
+
+        <main class="body-content">
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <footer class="site-footer">
+            <div>
+                <strong>{{ config.SITE_NAME }}</strong>
+                <p>{{ config.SITE_DESCRIPTION }}</p>
+            </div>
+            <div class="footer-links">
+                <a href="{{ url_for('voting') }}">Participar da votação</a>
+                <a href="{{ url_for('about') }}">Regras</a>
+            </div>
+            <a id="neocities" href="https://neocities.org/">Neocities</a>
+        </footer>
+        <div class="background-audio" aria-hidden="true">
+            <iframe
+                id="youtubeAudio"
+                title="Música de fundo do portal"
+                src="https://www.youtube.com/embed/n5z1Zmdcqow?autoplay=1&mute=0&enablejsapi=1&controls=0&loop=1&playlist=n5z1Zmdcqow&rel=0&playsinline=1"
+                allow="autoplay; encrypted-media"
+                loading="eager"></iframe>
+        </div>
+        <script src="{{ url_for('static', filename='site.js') }}"></script>
+    </body>
+</html>

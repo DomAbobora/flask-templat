@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% block title %}{{ config.SITE_NAME }} | Eleição temática{% endblock %}
+
+    <section class="hero">
+        <div class="hero-copy">
+            <p class="eyebrow">Portal eleitoral temático Eleições em Gensokyo</p>
+
+            <p class="eyebrow">Site feito por: DomAbobora, Miku, Hikari, Wolfy (Menção Honrosa)</p>
+            
+
+           
+            </p>
+            <h1>{{ config.SITE_NAME }}</h1>
+            <p class="hero-description">{{ config.SITE_DESCRIPTION }}. Consulte as informações, escolha um nome da lista demonstrativa e participe desta disputa especial.</p>
+            <div class="hero-actions">
+                <a class="button button-primary" href="{{ url_for('voting') }}">Ir votar</a>
+                <a class="button button-secondary" href="{{ url_for('about') }}">Conhecer as regras</a>
+            </div>
+        </div>
+        <div class="hero-image" role="img" aria-label="Cenário fantástico inspirado em Touhou Project"></div>
+    </section>
+
+    <section class="menu-section">
+        <div class="section-heading">
+            <p class="eyebrow">Prepare seu voto</p>
+            <h2>Uma eleição diferente</h2>
+        </div>
+        <div class="menu-grid">
+            <article class="menu-card">
+                <span class="card-tag">Tema</span>
+                <h3>Eleições em Gensokyo</h3>
+                <p>Prepare-se para uma experiência eleitoral única no universo de Touhou Project.</p>
+            </article>
+            <article class="menu-card featured-card">
+                <span class="card-tag">Votação</span>
+                <h3>Escolha consciente</h3>
+                <p>Leia a lista de candidatos, confira o número e confirme apenas quando tiver certeza. O futuro de gensokyo está em suas mãos</p>
+            </article>
+            <article class="menu-card">
+                <span class="card-tag">Token</span>
+                <h3>Um voto por pessoa</h3>
+                <p>Seu token é individual e não poderá ser reutilizado após a confirmação do voto. Não perca-o</p>
+            </article>
+        </div>
+    </section>
+{% endblock %}
