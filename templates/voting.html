@@ -102,6 +102,7 @@
                     <p id="voteStage">Etapa 1 de 2: escolha o candidato à Presidência.</p>
                     <p>Confirme apenas quando tiver certeza do seu voto.</p>
                 </div>
+
                 <div class="candidates-grid">
                     <!-- Presidência -->
                     <div class="candidate-section" id="presidenciaSection">
@@ -150,11 +151,11 @@
                 </div>
 
                 <div class="urna-display">
+                    <div id="candidatePreview" class="candidate-preview" aria-live="polite" hidden>
+                    </div>
                     <div class="display-item">
                         <label>Número digitado:</label>
                         <input type="text" id="votoNumero" readonly placeholder="Nenhum número digitado" />
-                    </div>
-                    <div id="candidatePreview" class="candidate-preview" aria-live="polite" hidden>
                     </div>
                     <div class="display-buttons">
                         <button id="confirmarVoto" class="button button-primary">Confirmar Voto</button>

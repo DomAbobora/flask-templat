@@ -1,6 +1,59 @@
 document.addEventListener('DOMContentLoaded', () => {
   window.backgroundMusicDisabled = true;
 
+  // Dados dos candidatos
+  const candidatesData = {
+    presidencia: {
+      '13': {
+        party: 'PT',
+        name: 'Suika / Yuugi',
+        images: [
+          "{{ url_for('static', filename='suika.png') }}",
+          "{{ url_for('static', filename='yuugi.png') }}"
+        ]
+      },
+      '14': {
+        party: 'Missão',
+        name: 'Miko / Shou',
+        images: [
+          "{{ url_for('static', filename='miko.png') }}",
+          "{{ url_for('static', filename='shou.png') }}"
+        ]
+      },
+      '22': {
+        party: 'PL',
+        name: 'Reimu / Marisa',
+        images: [
+          "{{ url_for('static', filename='reimu-marisa.png') }}"
+        ]
+      }
+    },
+    governador: {
+      '1399': {
+        party: 'PT',
+        name: 'Cirno, Sunny Milk, Star Sapphire, Luna Child',
+        images: [
+          "{{ url_for('static', filename='cirno-sunny-star-luna.png') }}",
+          "{{ url_for('static', filename='governador-pt.png') }}"
+        ]
+      },
+      '1400': {
+        party: 'Missão',
+        name: 'Clownpiece',
+        images: [
+          "{{ url_for('static', filename='clownpiece.png') }}"
+        ]
+      },
+      '2222': {
+        party: 'PL',
+        name: 'Suwako',
+        images: [
+          "{{ url_for('static', filename='suwako.png') }}"
+        ]
+      }
+    }
+  };
+
   const sections = {
     registro: document.getElementById('registroSecao'),
     fila: document.getElementById('filaSeccao'),
@@ -71,35 +124,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const renderCandidatePreview = (target, number) => {
     if (!target) return;
-    const activeSection = voteStageName === 'presidencia' ? presidenciaSection : governadorSection;
-    const card = Array.from(activeSection ? activeSection.querySelectorAll('[data-candidate-number]') : [])
-      .find((candidate) => candidate.dataset.candidateNumber === number);
-
-    if (!card) {
+    
+    const candidateInfo = candidatesData[voteStageName][number];
+    
+    if (!candidateInfo) {
       target.innerHTML = '<p>Chapa não encontrada. Confira o número digitado.</p>';
       return;
     }
 
-    const party = card.querySelector('.party-label');
-    const name = card.querySelector('.candidate-name');
-    const images = Array.from(card.querySelectorAll('img'));
     target.innerHTML = `
-      <strong>${party ? party.textContent : 'Chapa'}</strong>
+      <strong>${candidateInfo.party}</strong>
       <div class="candidate-preview-images">
-        ${images.map((image) => `<img src="${image.src}" alt="${image.alt}" />`).join('')}
+        ${candidateInfo.images.map((image) => `<img src="${image}" alt="${candidateInfo.name}" />`).join('')}
       </div>
-      <span>${name ? name.textContent : 'Candidatura selecionada'}</span>
+      <span>${candidateInfo.name}</span>
     `;
   };
 
   const updateCandidatePreview = (number) => {
     if (!candidatePreview) return;
-    candidatePreview.hidden = false;
-    renderCandidatePreview(candidatePreview, number);
-
-    document.querySelectorAll('[data-candidate-number]').forEach((candidate) => {
-      candidate.classList.toggle('is-number-match', candidate.dataset.candidateNumber === number);
-    });
+    
+    // Verifica se o número é válido
+    const isValidNumber = candidatesData[voteStageName][number] !== undefined;
+    
+    // Só mostra o preview se o número for válido
+    if (isValidNumber) {
+      candidatePreview.hidden = false;
+      renderCandidatePreview(candidatePreview, number);
+    } else {
+      candidatePreview.hidden = true;
+      candidatePreview.innerHTML = '';
+    }
   };
 
   // Atualizar display do length
@@ -152,6 +207,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       currentVoterData = { nome, token };
+      // Garantir que começa com a seção de presidência visível
+      voteStageName = 'presidencia';
+      presidentialVote = '';
+      if (presidenciaSection) presidenciaSection.style.display = 'block';
+      if (governadorSection) governadorSection.style.display = 'none';
       showSection('urna');
     });
   }
@@ -169,13 +229,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const voto = votoNumero.value.trim();
 
       if (!voto) {
-        alert('Por favor, clique em um candidato ou digite um número');
+        alert('Por favor, digite um número');
         return;
       }
 
-      const activeSection = voteStageName === 'presidencia' ? presidenciaSection : governadorSection;
-      const validVote = Array.from(activeSection ? activeSection.querySelectorAll('[data-candidate-number]') : [])
-        .some((candidate) => candidate.dataset.candidateNumber === voto);
+      const validVote = candidatesData[voteStageName][voto] !== undefined;
 
       if (!validVote) {
         alert('Digite um número válido para esta etapa da votação.');
@@ -192,9 +250,6 @@ document.addEventListener('DOMContentLoaded', () => {
           candidatePreview.innerHTML = '';
           candidatePreview.hidden = true;
         }
-        document.querySelectorAll('[data-candidate-number]').forEach((candidate) => {
-          candidate.classList.remove('is-number-match');
-        });
         if (presidenciaSection) presidenciaSection.style.display = 'none';
         if (governadorSection) governadorSection.style.display = 'block';
         if (voteStage) voteStage.textContent = 'Etapa 2 de 2: escolha o Governador da Vila Humana.';
@@ -256,9 +311,6 @@ document.addEventListener('DOMContentLoaded', () => {
         candidatePreview.innerHTML = '';
         candidatePreview.hidden = true;
       }
-      document.querySelectorAll('[data-candidate-number]').forEach((candidate) => {
-        candidate.classList.remove('is-number-match');
-      });
     });
   }
 
@@ -269,9 +321,6 @@ document.addEventListener('DOMContentLoaded', () => {
         candidatePreview.innerHTML = '';
         candidatePreview.hidden = true;
       }
-      document.querySelectorAll('[data-candidate-number]').forEach((candidate) => {
-        candidate.classList.remove('is-number-match');
-      });
       showSection('urna');
     });
   }
@@ -283,9 +332,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (presidenciaSection) presidenciaSection.style.display = 'block';
       if (governadorSection) governadorSection.style.display = 'none';
       if (voteStage) voteStage.textContent = 'Etapa 1 de 2: escolha o candidato à Presidência.';
-      document.querySelectorAll('[data-candidate-number]').forEach((candidate) => {
-        candidate.classList.remove('is-number-match');
-      });
       showSection('registro');
     });
   }
