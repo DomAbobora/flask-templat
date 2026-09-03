@@ -55,13 +55,13 @@ def save_votes_to_disk():
 def load_tokens_from_disk():
     tokens_path = Path(TOKENS_FILE)
     if not tokens_path.exists():
-        return set()
+        return {}
 
     try:
         with tokens_path.open("r", encoding="utf-8") as file:
             stored_tokens = json.load(file)
     except (json.JSONDecodeError, OSError):
-        return set()
+        return {}
 
     if isinstance(stored_tokens, dict):
         return {
