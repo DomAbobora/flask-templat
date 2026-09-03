@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (confirmRegistro) {
-    confirmRegistro.addEventListener('click', () => {
+    confirmRegistro.addEventListener('click', async () => {
       const nome = nomeRegistro.value.trim();
       const token = tokenRegistro.value.trim();
 
@@ -204,11 +204,27 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Verificar se token já foi usado
       if (usedTokens.has(token)) {
         alert('Este token já foi utilizado. Acesso negado.');
         tokenRegistro.value = '';
         nomeRegistro.value = '';
+        return;
+      }
+
+      let tokenResponse;
+      try {
+        tokenResponse = await fetch('/api/tokens/validate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token }),
+        });
+      } catch (error) {
+        alert('Não foi possível validar o token com o servidor.');
+        return;
+      }
+      if (!tokenResponse.ok) {
+        const errorData = await tokenResponse.json();
+        alert(errorData.error || 'Token inválido.');
         return;
       }
 

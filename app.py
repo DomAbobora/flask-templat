@@ -1,6 +1,7 @@
 import json
 import re
 from collections import Counter
+from datetime import date
 from pathlib import Path
 import secrets
 from threading import Lock
@@ -62,14 +63,24 @@ def load_tokens_from_disk():
     except (json.JSONDecodeError, OSError):
         return set()
 
-    return {str(token) for token in stored_tokens if isinstance(token, str)}
+    if isinstance(stored_tokens, dict):
+        return {
+            str(token): str(created_date)
+            for token, created_date in stored_tokens.items()
+            if isinstance(token, str) and isinstance(created_date, str)
+        }
+    return {
+        str(token): date.today().isoformat()
+        for token in stored_tokens
+        if isinstance(token, str)
+    }
 
 
 def save_tokens_to_disk():
     tokens_path = Path(TOKENS_FILE)
     tokens_path.parent.mkdir(parents=True, exist_ok=True)
     with tokens_path.open("w", encoding="utf-8") as file:
-        json.dump(sorted(issued_tokens), file, ensure_ascii=False, indent=2)
+        json.dump(issued_tokens, file, ensure_ascii=False, indent=2)
 
 
 vote_lock = Lock()
@@ -140,9 +151,20 @@ def issue_token():
     character_pool = "".join(enabled_groups)
     token = "".join(secrets.choice(character_pool) for _ in range(length))
     with vote_lock:
-        issued_tokens.add(token)
+        issued_tokens[token] = date.today().isoformat()
         save_tokens_to_disk()
     return jsonify({"token": token}), 201
+
+
+@app.post("/api/tokens/validate")
+def validate_token():
+    data = request.get_json(silent=True) or {}
+    token = str(data.get("token", "")).strip()
+    with vote_lock:
+        token_date = issued_tokens.get(token)
+    if not TOKEN_PATTERN.fullmatch(token) or token_date != date.today().isoformat():
+        return jsonify({"error": "O sábio eremita diz: coloque um token válido criado hoje."}), 400
+    return jsonify({"valid": True})
 
 
 @app.post("/api/votes")
@@ -175,11 +197,11 @@ def register_votes():
                 jsonify({"error": "O Sábio Eremita diz:\n\nvocê já fez uma votação."}),
                 409,
             )
-        if token not in issued_tokens:
-            return jsonify({"error": "O sábio eremita diz: coloque um token válido"}), 400
+        if issued_tokens.get(token) != date.today().isoformat():
+            return jsonify({"error": "O sábio eremita diz: coloque um token válido criado hoje."}), 400
         votes_by_office["presidencia"][presidencia] += 1
         votes_by_office["governador"][governador] += 1
-        issued_tokens.remove(token)
+        del issued_tokens[token]
         save_votes_to_disk()
         save_tokens_to_disk()
         voted_ips.add(voter_ip)
