@@ -81,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentVoterData = {};
   let voteStageName = 'presidencia';
   let presidentialVote = '';
+  const validTokenPattern = /^[A-Za-z0-9!@#$%&*]{8,32}$/;
 
   const playUrnaAudio = (audio) => {
     if (!audio) return;
@@ -197,6 +198,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
+      if (!validTokenPattern.test(token)) {
+        alert('O sábio eremita diz: coloque um token válido');
+        tokenRegistro.value = '';
+        return;
+      }
+
       // Verificar se token já foi usado
       if (usedTokens.has(token)) {
         alert('Este token já foi utilizado. Acesso negado.');
@@ -259,7 +266,11 @@ document.addEventListener('DOMContentLoaded', () => {
         response = await fetch('/api/votes', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ presidencia: presidentialVote, governador: voto }),
+          body: JSON.stringify({
+            token: currentVoterData.token,
+            presidencia: presidentialVote,
+            governador: voto,
+          }),
         });
       } catch (error) {
         alert('Não foi possível conectar ao servidor de votação.');
@@ -271,6 +282,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       if (response.status === 403) {
+        const errorData = await response.json();
+        alert(errorData.error);
+        return;
+      }
+      if (response.status === 400) {
         const errorData = await response.json();
         alert(errorData.error);
         return;

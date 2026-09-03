@@ -1,6 +1,8 @@
 import json
+import re
 from collections import Counter
 from pathlib import Path
+import secrets
 from threading import Lock
 
 from flask import Flask, jsonify, render_template, request
@@ -14,6 +16,8 @@ app.config["SITE_DESCRIPTION"] = (
 app.config["BLOG_DESCRIPTION"] = "votações eremitas"
 
 VOTES_FILE = Path(__file__).resolve().parent / "votes.json"
+TOKENS_FILE = Path(__file__).resolve().parent / "tokens.json"
+TOKEN_PATTERN = re.compile(r"^[A-Za-z0-9!@#$%&*]{8,32}$")
 
 
 def load_votes_from_disk():
@@ -47,6 +51,27 @@ def save_votes_to_disk():
         json.dump(payload, file, ensure_ascii=False, indent=2)
 
 
+def load_tokens_from_disk():
+    tokens_path = Path(TOKENS_FILE)
+    if not tokens_path.exists():
+        return set()
+
+    try:
+        with tokens_path.open("r", encoding="utf-8") as file:
+            stored_tokens = json.load(file)
+    except (json.JSONDecodeError, OSError):
+        return set()
+
+    return {str(token) for token in stored_tokens if isinstance(token, str)}
+
+
+def save_tokens_to_disk():
+    tokens_path = Path(TOKENS_FILE)
+    tokens_path.parent.mkdir(parents=True, exist_ok=True)
+    with tokens_path.open("w", encoding="utf-8") as file:
+        json.dump(sorted(issued_tokens), file, ensure_ascii=False, indent=2)
+
+
 vote_lock = Lock()
 loaded_votes = load_votes_from_disk()
 votes_by_office = {
@@ -54,6 +79,7 @@ votes_by_office = {
     "governador": Counter(loaded_votes["governador"]),
 }
 voted_ips = set()
+issued_tokens = load_tokens_from_disk()
 allowed_test_ips = {"127.0.0.1", "::1", "192.168.5.112"}
 allowed_votes = {
     "presidencia": {"13", "14", "22"},
@@ -86,11 +112,47 @@ def results():
     return render_template("results.html")
 
 
+@app.post("/api/tokens")
+def issue_token():
+    data = request.get_json(silent=True) or {}
+    try:
+        length = int(data.get("length", 18))
+    except (TypeError, ValueError):
+        length = 0
+
+    if not 8 <= length <= 32:
+        return jsonify({"error": "O tamanho do token deve estar entre 8 e 32."}), 400
+
+    character_groups = {
+        "upper": "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "lower": "abcdefghijklmnopqrstuvwxyz",
+        "numbers": "0123456789",
+        "symbols": "!@#$%&*",
+    }
+    enabled_groups = [
+        characters
+        for option, characters in character_groups.items()
+        if data.get(option, False)
+    ]
+    if not enabled_groups:
+        return jsonify({"error": "Selecione pelo menos um tipo de caractere."}), 400
+
+    character_pool = "".join(enabled_groups)
+    token = "".join(secrets.choice(character_pool) for _ in range(length))
+    with vote_lock:
+        issued_tokens.add(token)
+        save_tokens_to_disk()
+    return jsonify({"token": token}), 201
+
+
 @app.post("/api/votes")
 def register_votes():
     data = request.get_json(silent=True) or {}
+    token = str(data.get("token", "")).strip()
     presidencia = str(data.get("presidencia", "")).strip()
     governador = str(data.get("governador", "")).strip()
+    if not TOKEN_PATTERN.fullmatch(token):
+        return jsonify({"error": "O sábio eremita diz: coloque um token válido"}), 400
     if (
         presidencia not in allowed_votes["presidencia"]
         or governador not in allowed_votes["governador"]
@@ -113,9 +175,13 @@ def register_votes():
                 jsonify({"error": "O Sábio Eremita diz:\n\nvocê já fez uma votação."}),
                 409,
             )
+        if token not in issued_tokens:
+            return jsonify({"error": "O sábio eremita diz: coloque um token válido"}), 400
         votes_by_office["presidencia"][presidencia] += 1
         votes_by_office["governador"][governador] += 1
+        issued_tokens.remove(token)
         save_votes_to_disk()
+        save_tokens_to_disk()
         voted_ips.add(voter_ip)
     return jsonify({"message": "Voto registrado."}), 201
 

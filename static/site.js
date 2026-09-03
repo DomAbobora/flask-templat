@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     muteToggle.textContent = muted ? 'Ativar música' : 'Mutar música';
   };
 
-  const generateToken = () => {
+  const generateToken = async () => {
     if (!tokenInput) {
       return;
     }
@@ -33,24 +33,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const numbers = document.getElementById('tokenNumbers').checked;
     const symbols = document.getElementById('tokenSymbols').checked;
 
-    const pool = [];
-    if (upper) pool.push('ABCDEFGHIJKLMNOPQRSTUVWXYZ');
-    if (lower) pool.push('abcdefghijklmnopqrstuvwxyz');
-    if (numbers) pool.push('0123456789');
-    if (symbols) pool.push('!@#$%&*');
-
-    if (!pool.length) {
+    if (!upper && !lower && !numbers && !symbols) {
       tokenInput.value = '';
+      alert('Selecione pelo menos um tipo de caractere.');
       return;
     }
 
-    let result = '';
-    for (let i = 0; i < length; i += 1) {
-      const characters = pool[Math.floor(Math.random() * pool.length)];
-      result += characters[Math.floor(Math.random() * characters.length)];
+    try {
+      const response = await fetch('/api/tokens', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          length,
+          upper,
+          lower,
+          numbers,
+          symbols,
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        tokenInput.value = '';
+        alert(data.error || 'Não foi possível gerar o token.');
+        return;
+      }
+      tokenInput.value = data.token;
+    } catch (error) {
+      tokenInput.value = '';
+      alert('Não foi possível gerar o token.');
     }
-
-    tokenInput.value = result;
   };
 
   if (generateTokenButton) {
