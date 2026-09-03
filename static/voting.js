@@ -77,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const presidenciaSection = document.getElementById('presidenciaSection');
   const governadorSection = document.getElementById('governadorSection');
 
-  let usedTokens = new Set();
   let currentVoterData = {};
   let voteStageName = 'presidencia';
   let presidentialVote = '';
@@ -168,12 +167,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Fluxo: Registro -> Fila -> Banco -> Urna -> Confirmação
   if (proceedVoting) {
-    proceedVoting.addEventListener('click', () => {
+    proceedVoting.addEventListener('click', async () => {
       const nome = nomeEleitor.value.trim();
       const token = tokenInput.value.trim();
 
       if (!nome || !token) {
         alert('Por favor, preencha o nome e gere um token');
+        return;
+      }
+
+      // Registrar token como válido no servidor
+      try {
+        const response = await fetch('/api/register-token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token }),
+        });
+
+        if (response.status === 409) {
+          alert('Este token já foi utilizado.');
+          return;
+        }
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          alert(errorData.error || 'Erro ao registrar token.');
+          return;
+        }
+      } catch (error) {
+        alert('Não foi possível conectar ao servidor.');
         return;
       }
 
@@ -311,9 +333,6 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Não foi possível registrar o voto.');
         return;
       }
-
-      // Registrar que este token foi usado após a confirmação do servidor.
-      usedTokens.add(currentVoterData.token);
 
       const votoData = {
         nome: currentVoterData.nome,
