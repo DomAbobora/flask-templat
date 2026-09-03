@@ -8,23 +8,23 @@ document.addEventListener('DOMContentLoaded', () => {
         party: 'PT',
         name: 'Suika / Yuugi',
         images: [
-          "{{ url_for('static', filename='suika.png') }}",
-          "{{ url_for('static', filename='yuugi.png') }}"
+          "/static/suika.png",
+          "/static/yuugi.png"
         ]
       },
       '14': {
         party: 'Missão',
         name: 'Miko / Shou',
         images: [
-          "{{ url_for('static', filename='miko.png') }}",
-          "{{ url_for('static', filename='shou.png') }}"
+          "/static/miko.png",
+          "/static/shou.png"
         ]
       },
       '22': {
         party: 'PL',
         name: 'Reimu / Marisa',
         images: [
-          "{{ url_for('static', filename='reimu-marisa.png') }}"
+          "/static/reimu-marisa.png"
         ]
       }
     },
@@ -33,22 +33,22 @@ document.addEventListener('DOMContentLoaded', () => {
         party: 'PT',
         name: 'Cirno, Sunny Milk, Star Sapphire, Luna Child',
         images: [
-          "{{ url_for('static', filename='cirno-sunny-star-luna.png') }}",
-          "{{ url_for('static', filename='governador-pt.png') }}"
+          "/static/cirno-sunny-star-luna.png",
+          "/static/governador-pt.png"
         ]
       },
       '1400': {
         party: 'Missão',
         name: 'Clownpiece',
         images: [
-          "{{ url_for('static', filename='clownpiece.png') }}"
+          "/static/clownpiece.png"
         ]
       },
       '2222': {
         party: 'PL',
         name: 'Suwako',
         images: [
-          "{{ url_for('static', filename='suwako.png') }}"
+          "/static/suwako.png"
         ]
       }
     }
@@ -111,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const limparVoto = document.getElementById('limparVoto');
   const corrigirVoto = document.getElementById('corrigirVoto');
   const voltarAoInicio = document.getElementById('voltarAoInicio');
+  const keypadButtons = document.querySelectorAll('.keypad-button');
 
   // Funções de navegação
   const showSection = (sectionName) => {
@@ -149,10 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Só mostra o preview se o número for válido
     if (isValidNumber) {
-      candidatePreview.hidden = false;
       renderCandidatePreview(candidatePreview, number);
     } else {
-      candidatePreview.hidden = true;
       candidatePreview.innerHTML = '';
     }
   };
@@ -248,7 +247,6 @@ document.addEventListener('DOMContentLoaded', () => {
         votoNumero.value = '';
         if (candidatePreview) {
           candidatePreview.innerHTML = '';
-          candidatePreview.hidden = true;
         }
         if (presidenciaSection) presidenciaSection.style.display = 'none';
         if (governadorSection) governadorSection.style.display = 'block';
@@ -304,24 +302,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (limparVoto) {
-    limparVoto.addEventListener('click', () => {
-      votoNumero.value = '';
-      if (candidatePreview) {
-        candidatePreview.innerHTML = '';
-        candidatePreview.hidden = true;
-      }
-    });
-  }
-
   if (corrigirVoto) {
     corrigirVoto.addEventListener('click', () => {
       votoNumero.value = '';
       if (candidatePreview) {
         candidatePreview.innerHTML = '';
-        candidatePreview.hidden = true;
       }
-      showSection('urna');
     });
   }
 
@@ -339,15 +325,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // Inicializar mostrando a seção de registro
   showSection('registro');
 
-  // Suporte a entrada numérica na urna
-  if (votoNumero) {
-    document.addEventListener('keydown', (e) => {
-      if (sections.urna.style.display !== 'none' && /^\d$/.test(e.key)) {
-        votoNumero.value += e.key;
-        playUrnaAudio(urnaTeclaAudio);
-        updateCandidatePreview(votoNumero.value);
-      }
+  // Suporte aos botões do teclado numérico
+  keypadButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      const number = button.dataset.number;
+      votoNumero.value += number;
+      playUrnaAudio(urnaTeclaAudio);
+      updateCandidatePreview(votoNumero.value);
     });
-  }
+  });
 
 });

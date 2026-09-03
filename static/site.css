@@ -10,11 +10,7 @@
     --green: #16834b;
     --blue: #0757a0;
 }
-#neocities {
-  color: #e9ff25; 
-  font-size: 19px;
-    font-weight: bold;
-}
+
 
 * {
     box-sizing: border-box;
@@ -782,7 +778,8 @@ body {
 }
 
 .candidate-preview {
-    min-height: 116px;
+    min-height: 150;
+    min-width: 200px;
     margin: 12px auto 18px;
     padding: 12px;
     border: 1px solid var(--line);
@@ -844,6 +841,50 @@ body {
 
 .display-buttons .button {
     min-width: 140px;
+}
+
+.display-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.numeric-keypad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 24px 0;
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.numeric-keypad button:nth-child(10) {
+    grid-column: 2;
+}
+
+.keypad-button {
+    padding: 20px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--mustard);
+    color: var(--ink);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: Arial, sans-serif;
+}
+
+.keypad-button:hover {
+    background: #e6b800;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.keypad-button:active {
+    transform: scale(0.98);
 }
 
 .results-page {

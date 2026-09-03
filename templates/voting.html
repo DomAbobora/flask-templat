@@ -103,63 +103,35 @@
                     <p>Confirme apenas quando tiver certeza do seu voto.</p>
                 </div>
 
-                <div class="candidates-grid">
-                    <!-- Presidência -->
-                    <div class="candidate-section" id="presidenciaSection">
-                        <h3>Presidência</h3>
-                        <div class="candidates-row">
-                            <button class="candidate-card is-provisional" data-candidate-number="13">
-                                <span class="party-label">PT</span>
-                                <span class="candidate-pair"><img src="{{ url_for('static', filename='suika.png') }}" alt="Suika" /><img src="{{ url_for('static', filename='yuugi.png') }}" alt="Yuugi" /></span>
-                                <span class="candidate-number">13</span><span class="candidate-name">Suika / Yuugi</span>
-                            </button>
-                            <button class="candidate-card is-provisional" data-candidate-number="14">
-                                <span class="party-label">Missão</span>
-                                <span class="candidate-pair"><img src="{{ url_for('static', filename='miko.png') }}" alt="Miko" /><img src="{{ url_for('static', filename='shou.png') }}" alt="Shou" /></span>
-                                <span class="candidate-number">14</span><span class="candidate-name">Miko / Shou</span>
-                            </button>
-                            <button class="candidate-card is-provisional" data-candidate-number="22">
-                                <span class="party-label">PL</span>
-                                <span class="candidate-pair single-image"><img src="{{ url_for('static', filename='reimu-marisa.png') }}" alt="Reimu e Marisa" /></span>
-                                <span class="candidate-number">22</span><span class="candidate-name">Reimu / Marisa</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Governador -->
-                    <div class="candidate-section" id="governadorSection" style="display: none;">
-                        <h3>Governador da Vila Humana</h3>
-                        <div class="candidates-row">
-                            <button class="candidate-card is-provisional" data-candidate-number="1399">
-                                <span class="party-label">PT</span>
-                                <span class="candidate-pair"><img src="{{ url_for('static', filename='cirno-sunny-star-luna.png') }}" alt="Cirno" /><img src="{{ url_for('static', filename='governador-pt.png') }}" alt="Sunny Milk, Star Sapphire e Luna Child" /></span>
-                                <span class="candidate-number">1399</span><span class="candidate-name">Cirno, Sunny Milk, Star Sapphire, Luna Child</span>
-                            </button>
-                            <button class="candidate-card is-provisional" data-candidate-number="1400">
-                                <span class="party-label">Missão</span>
-                                <span class="candidate-pair single-image"><img src="{{ url_for('static', filename='clownpiece.png') }}" alt="Clownpiece" /></span>
-                                <span class="candidate-number">1400</span><span class="candidate-name">Clownpiece</span>
-                            </button>
-                            <button class="candidate-card is-provisional" data-candidate-number="2222">
-                                <span class="party-label">PL</span>
-                                <span class="candidate-pair single-image"><img src="{{ url_for('static', filename='suwako.png') }}" alt="Suwako" /></span>
-                                <span class="candidate-number">2222</span><span class="candidate-name">Suwako</span>
-                            </button>
-                        </div>
-                    </div>
-
+                <div class="candidates-grid" style="display: none;">
+                    
                 </div>
 
                 <div class="urna-display">
-                    <div id="candidatePreview" class="candidate-preview" aria-live="polite" hidden>
+                    <div class="display-info">
+                        <div id="candidatePreview" class="candidate-preview" aria-live="polite">
+                        </div>
+                        <div class="display-item">
+                            <label>Número digitado:</label>
+                            <input type="text" id="votoNumero" readonly placeholder="---" />
+                        </div>
                     </div>
-                    <div class="display-item">
-                        <label>Número digitado:</label>
-                        <input type="text" id="votoNumero" readonly placeholder="Nenhum número digitado" />
+
+                    <div class="numeric-keypad">
+                        <button class="keypad-button" data-number="1">1</button>
+                        <button class="keypad-button" data-number="2">2</button>
+                        <button class="keypad-button" data-number="3">3</button>
+                        <button class="keypad-button" data-number="4">4</button>
+                        <button class="keypad-button" data-number="5">5</button>
+                        <button class="keypad-button" data-number="6">6</button>
+                        <button class="keypad-button" data-number="7">7</button>
+                        <button class="keypad-button" data-number="8">8</button>
+                        <button class="keypad-button" data-number="9">9</button>
+                        <button class="keypad-button" data-number="0">0</button>
                     </div>
+
                     <div class="display-buttons">
                         <button id="confirmarVoto" class="button button-primary">Confirmar Voto</button>
-                        <button id="limparVoto" class="button button-secondary">Limpar</button>
                         <button id="corrigirVoto" class="button button-secondary">Corrigir</button>
                     </div>
                 </div>
