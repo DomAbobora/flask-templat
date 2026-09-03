@@ -163,7 +163,12 @@ def validate_token():
     with vote_lock:
         token_date = issued_tokens.get(token)
     if not TOKEN_PATTERN.fullmatch(token) or token_date != date.today().isoformat():
-        return jsonify({"error": "O sábio eremita diz: coloque um token válido criado hoje."}), 400
+        return (
+            jsonify(
+                {"error": "O sábio eremita diz: coloque um token válido criado hoje."}
+            ),
+            400,
+        )
     return jsonify({"valid": True})
 
 
@@ -181,7 +186,9 @@ def register_votes():
     ):
         return jsonify({"error": "Informe os dois votos."}), 400
 
-    voter_ip = request.remote_addr or "unknown"
+    if not token:
+        return jsonify({"error": "Token não fornecido."}), 400
+
     with vote_lock:
         if voter_ip not in allowed_test_ips:
             return (
@@ -198,7 +205,14 @@ def register_votes():
                 409,
             )
         if issued_tokens.get(token) != date.today().isoformat():
-            return jsonify({"error": "O sábio eremita diz: coloque um token válido criado hoje."}), 400
+            return (
+                jsonify(
+                    {
+                        "error": "O sábio eremita diz: coloque um token válido criado hoje."
+                    }
+                ),
+                400,
+            )
         votes_by_office["presidencia"][presidencia] += 1
         votes_by_office["governador"][governador] += 1
         del issued_tokens[token]
