@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Eleições em Gensokyo | Eleição temática</title>
+        <link rel="stylesheet" type="text/css" href="static/site.css" />
+    </head>
+
+    <body>
+        <div class="government-banner">Portal temático do Crônicas • projeto demonstrativo sem vínculo com o Governo Federal ou com a Justiça Eleitoral</div>
+        <header class="navbar">
+            <div class="nav-inner">
+                <a href="index.html" class="navbar-brand">
+                    <span class="brand-mark">東</span>
+                    <span>Eleições em Gensokyo</span>
+                </a>
+                <nav aria-label="Navegacao principal">
+                    <a href="index.html" class="navbar-item">Inicio</a>
+                    <a href="about.html" class="navbar-item">Sobre</a>
+                    <a href="blog.html" class="navbar-item">Crônicas de Gensokyo</a>
+                    <a href="voting.html" class="navbar-item">Votação</a>
+                    <a href="results.html" class="navbar-item">Resultados</a>
+                    <a href="voting.html" class="nav-order">Ir votar</a>
+                </nav>
+                <button id="muteToggle" type="button" class="audio-toggle" aria-pressed="false">Mutar música</button>
+            </div>
+        </header>
+
+        <main class="body-content">
+            
+    Eleições em Gensokyo | Eleição temática
+
+    <section class="voting-section" id="registroSecao" style="display: none;">
+        <div class="voting-card">
+            <h2>Registrar eleitor</h2>
+            <p class="section-description">Insira seu nome e gere ou cole o token da votação</p>
+            
+            <div class="form-group">
+                <label for="nomeEleitor">Nome do Eleitor</label>
+                <input type="text" id="nomeEleitor" placeholder="Digite o nome completo" required />
+            </div>
+
+            <div class="token-section">
+                <div class="form-group">
+                    <label for="tokenInput">Token de Votação</label>
+                    <input type="text" id="tokenInput" placeholder="Token gerado automaticamente ou colado" readonly />
+                </div>
+                
+                <div class="token-generator">
+                    <h4>Gerador de Token</h4>
+                    <div class="generator-controls">
+                        <div class="form-group">
+                            <label for="tokenLength">Tamanho: <span id="lengthValue">18</span></label>
+                            <input type="range" id="tokenLength" min="8" max="32" value="18" />
+                        </div>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" id="tokenUpper" checked /> Maiúsculas</label>
+                            <label><input type="checkbox" id="tokenLower" checked /> Minúsculas</label>
+                            <label><input type="checkbox" id="tokenNumbers" checked /> Números</label>
+                            <label><input type="checkbox" id="tokenSymbols" /> Símbolos</label>
+                        </div>
+                        <button id="generateToken" class="button button-primary">Gerar Token</button>
+                    </div>
+                </div>
+
+                <button id="copyToken" class="button button-secondary">Copiar</button>
+            </div>
+
+            <button id="proceedVoting" class="button button-primary full-width" style="margin-top: 20px;">
+                Prosseguir para Votação
+            </button>
+        </div>
+    </section>
+
+    <section class="voting-section" id="filaSeccao">
+        <div class="queue-container">
+            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=85" 
+                 alt="Fila de votação" 
+                 class="queue-image" 
+                 style="filter: blur(6px);" />
+            <div class="queue-overlay">
+                <h2>Eleição do Crônicas</h2>
+                <p>Prepare-se para votar entre os personagens de Touhou Project</p>
+                <button id="enterVoting" class="button button-primary large">Começar a Votar</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="voting-section" id="bancoSecao" style="display: none;">
+        <div class="banco-container">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1200&q=85" 
+                 alt="Seção de votação" 
+                 class="banco-image"
+                 style="filter: blur(8px);" />
+            <div class="banco-form">
+                <h3>Seção eleitoral</h3>
+                <div class="form-group">
+                    <label for="nomeRegistro">Nome</label>
+                    <input type="text" id="nomeRegistro" placeholder="Digite seu nome" required />
+                </div>
+                <div class="form-group">
+                    <label for="tokenRegistro">Token</label>
+                    <input type="text" id="tokenRegistro" placeholder="Cole seu token aqui" required />
+                </div>
+                <button id="confirmRegistro" class="button button-primary">Confirmar</button>
+                <button id="backToQueue" class="button button-secondary">Voltar</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="voting-section" id="urvnSecao" style="display: none;">
+        <div class="urna-container">
+            <div class="urna-audio" aria-hidden="true">
+                <audio id="urnaTeclaAudio" preload="auto">
+                    <source src="https://cdn.discordapp.com/attachments/1079485209227046993/1544795829913526362/urna-tecla.mp3?ex=6a9b203a&amp;is=6a99ceba&amp;hm=3188725ddc05c800464d99ce03c493123b3099015ac7475f2e600a3f758bea2e&amp;" type="audio/mpeg" />
+                </audio>
+                <audio id="urnaVotoAudio" preload="auto">
+                    <source src="https://cdn.discordapp.com/attachments/1079485209227046993/1544795830316441600/urna-voto.mp3?ex=6a9b203a&amp;is=6a99ceba&amp;hm=64cd17797fad8fdda89b087815dcc36cec700054048acfe7f577d28de76e795a&amp;" type="audio/mpeg" />
+                </audio>
+            </div>
+            <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1200&q=85" 
+                 alt="Cabine de votação" 
+                 class="urna-background"
+                 style="filter: blur(4px);" />
+            
+            <div class="urna-content">
+                <h2>Urna eletrônica do Crônicas</h2>
+                <div class="candidate-notice">
+                    <p id="voteStage">Etapa 1 de 2: escolha o candidato à Presidência.</p>
+                    <p>Confirme apenas quando tiver certeza do seu voto.</p>
+                </div>
+
+                <div class="candidates-grid" style="display: none;">
+                    
+                </div>
+
+                <div class="urna-display">
+                    <div class="display-info">
+                        <div id="candidatePreview" class="candidate-preview" aria-live="polite">
+                        </div>
+                        <div class="display-item">
+                            <label>Número digitado:</label>
+                            <input type="text" id="votoNumero" readonly placeholder="---" />
+                        </div>
+                    </div>
+
+                    <div class="numeric-keypad">
+                        <button class="keypad-button" data-number="1">1</button>
+                        <button class="keypad-button" data-number="2">2</button>
+                        <button class="keypad-button" data-number="3">3</button>
+                        <button class="keypad-button" data-number="4">4</button>
+                        <button class="keypad-button" data-number="5">5</button>
+                        <button class="keypad-button" data-number="6">6</button>
+                        <button class="keypad-button" data-number="7">7</button>
+                        <button class="keypad-button" data-number="8">8</button>
+                        <button class="keypad-button" data-number="9">9</button>
+                        <button class="keypad-button" data-number="0">0</button>
+                    </div>
+
+                    <div class="display-buttons">
+                        <button id="confirmarVoto" class="button button-primary">Confirmar Voto</button>
+                        <button id="corrigirVoto" class="button button-secondary">Corrigir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="voting-section" id="confirmacaoSecao" style="display: none;">
+        <div class="confirmation-card">
+            <h2>Obrigado por votar</h2>
+            <button id="voltarAoInicio" class="button button-primary">Voltar ao Início</button>
+        </div>
+    </section>
+
+    <script src="static/voting.js"></script>
+
+        </main>
+
+        <footer class="site-footer">
+            <div>
+                <strong>Eleições em Gensokyo</strong>
+                <p>Portal temático para uma eleição especial no universo de Touhou Project</p>
+            </div>
+            <div class="footer-links">
+                <a href="voting.html">Participar da votação</a>
+                <a href="about.html">Regras</a>
+            </div>
+        </footer>
+        <div class="background-audio" aria-hidden="true">
+            <iframe
+                id="youtubeAudio"
+                title="Música de fundo do portal"
+                src="https://www.youtube.com/embed/n5z1Zmdcqow?autoplay=1&mute=0&enablejsapi=1&controls=0&loop=1&playlist=n5z1Zmdcqow&rel=0&playsinline=1"
+                allow="autoplay; encrypted-media"
+                loading="eager"></iframe>
+        </div>
+        <script src="static/site.js"></script>
+    </body>
+</html>
