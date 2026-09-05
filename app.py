@@ -175,6 +175,7 @@ def validate_token():
 @app.post("/api/votes")
 def register_votes():
     data = request.get_json(silent=True) or {}
+    voter_ip = request.remote_addr
     token = str(data.get("token", "")).strip()
     presidencia = str(data.get("presidencia", "")).strip()
     governador = str(data.get("governador", "")).strip()
