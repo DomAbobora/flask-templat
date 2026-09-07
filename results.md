@@ -1,8 +1,8 @@
-{% extends 'base.html' %}
+---
+layout: default
+title: Resultados
+---
 
-{% block title %}{{ config.SITE_NAME }} | Resultados{% endblock %}
-
-{% block content %}
 <section class="results-page">
     <h1>Apuração em tempo real</h1>
     <p class="section-description">Resultados demonstrativos atualizados automaticamente.</p>
@@ -18,5 +18,4 @@
         </section>
     </div>
 </section>
-<script src="{{ url_for('static', filename='results.js') }}"></script>
-{% endblock %}
+<script src="{{ './static/results.js' | relative_url }}"></script>

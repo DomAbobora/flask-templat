@@ -1,18 +1,34 @@
+// ========== CONFIGURAÇÃO DA API ==========
+// Altere esta URL para o endereço da sua API externa
+if (typeof window.API_URL === 'undefined') {
+  window.API_URL = 'https://site-cronicas-api.onrender.com';
+}
+// ==========================================
+
 document.addEventListener('DOMContentLoaded', () => {
+  const API_URL = window.API_URL;
   const tokenInput = document.getElementById('tokenInput');
   const generateTokenButton = document.getElementById('generateToken');
   const copyTokenButton = document.getElementById('copyToken');
   const voteNumberInput = document.getElementById('votoNumero');
-  const youtubeAudio = document.getElementById('youtubeAudio');
+  const backgroundMedia = document.getElementById('backgroundAudio');
   const muteToggle = document.getElementById('muteToggle');
 
-  const sendYouTubeCommand = (func) => {
-    if (!youtubeAudio || !youtubeAudio.contentWindow) return;
-    youtubeAudio.contentWindow.postMessage(JSON.stringify({
-      event: 'command',
-      func,
-      args: [],
-    }), 'https://www.youtube.com');
+  const sendBackgroundCommand = (action) => {
+    if (!backgroundMedia) return;
+    const tag = backgroundMedia.tagName && backgroundMedia.tagName.toUpperCase();
+    if (tag === 'IFRAME' && backgroundMedia.contentWindow) {
+      backgroundMedia.contentWindow.postMessage(JSON.stringify({ event: 'command', func: action, args: [] }), 'https://www.youtube.com');
+      return;
+    }
+    // For local audio element
+    if (tag === 'AUDIO') {
+      if (action === 'playVideo' || action === 'play') {
+        backgroundMedia.play().catch(() => {});
+      } else if (action === 'pauseVideo' || action === 'pause') {
+        try { backgroundMedia.pause(); } catch (e) {}
+      }
+    }
   };
 
   const updateMuteButton = (muted) => {
@@ -40,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const response = await fetch('/api/tokens', {
+      const response = await fetch(`${API_URL}/api/tokens`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -94,25 +110,35 @@ document.addEventListener('DOMContentLoaded', () => {
     generateToken();
   }
 
-  if (youtubeAudio) {
+  if (backgroundMedia) {
     const requestPlayback = () => {
       const muted = window.localStorage.getItem('backgroundMusicMuted') === 'true';
-      sendYouTubeCommand(muted || window.backgroundMusicDisabled ? 'pauseVideo' : 'playVideo');
+      sendBackgroundCommand(muted || window.backgroundMusicDisabled ? 'pauseVideo' : 'playVideo');
       updateMuteButton(muted);
     };
 
-    youtubeAudio.addEventListener('load', requestPlayback);
+    // iframe uses 'load', audio uses 'loadeddata'
+    try {
+      if (backgroundMedia.tagName.toUpperCase() === 'IFRAME') {
+        backgroundMedia.addEventListener('load', requestPlayback);
+      } else {
+        backgroundMedia.addEventListener('loadeddata', requestPlayback);
+      }
+    } catch (e) {
+      // ignore
+    }
+
     // A first interaction lets browsers that block audible autoplay start playback.
     document.addEventListener('pointerdown', requestPlayback, { once: true });
     document.addEventListener('keydown', requestPlayback, { once: true });
   }
 
-  if (muteToggle && youtubeAudio) {
+  if (muteToggle && backgroundMedia) {
     muteToggle.addEventListener('click', () => {
       const muted = window.localStorage.getItem('backgroundMusicMuted') === 'true';
       const nextMuted = !muted;
       window.localStorage.setItem('backgroundMusicMuted', String(nextMuted));
-      sendYouTubeCommand(nextMuted || window.backgroundMusicDisabled ? 'pauseVideo' : 'playVideo');
+      sendBackgroundCommand(nextMuted || window.backgroundMusicDisabled ? 'pauseVideo' : 'playVideo');
       updateMuteButton(nextMuted);
     });
 

@@ -1,4 +1,12 @@
+// ========== CONFIGURAÇÃO DA API ==========
+// Altere esta URL para o endereço da sua API externa
+if (typeof window.API_URL === 'undefined') {
+  window.API_URL = 'https://site-cronicas-api.onrender.com';
+}
+// ==========================================
+
 document.addEventListener('DOMContentLoaded', () => {
+  const API_URL = window.API_URL;
   const names = {
     presidencia: { 13: 'Suika / Yuugi', 14: 'Miko / Shou', 22: 'Reimu / Marisa' },
     governador: {
@@ -18,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const loadResults = async () => {
-    const response = await fetch('/api/results', { cache: 'no-store' });
+    const response = await fetch(`${API_URL}/api/results`, { cache: 'no-store' });
     if (!response.ok) throw new Error('Não foi possível carregar os resultados.');
     const data = await response.json();
     renderOffice(document.getElementById('presidenciaResults'), data.presidencia, 'presidencia');

@@ -1,0 +1,43 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "bundle install",
+      "type": "shell",
+      "command": "gem install bundler || true && bundle install",
+      "problemMatcher": []
+    },
+    {
+      "label": "jekyll: serve",
+      "type": "shell",
+      "command": "bundle exec jekyll serve --livereload --host 127.0.0.1",
+      "isBackground": true,
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": {
+        "owner": "jekyll",
+        "pattern": [],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".*",
+          "endsPattern": "Server address: http://"
+        }
+      }
+    },
+    {
+      "label": "open: firefox",
+      "type": "shell",
+      "command": "firefox http://127.0.0.1:4000",
+      "dependsOn": ["jekyll: serve"],
+      "problemMatcher": []
+    },
+    {
+      "label": "serve and open",
+      "dependsOn": ["bundle install", "open: firefox"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -87,7 +87,8 @@ body {
     font: bold .75rem Arial, sans-serif;
 }
 
-.nav-order, .button {
+.nav-order,
+.button {
     display: inline-block;
     border-radius: 999px;
     font-family: Arial, sans-serif;
@@ -116,7 +117,8 @@ body {
     min-height: 470px;
 }
 
-.hero h1, .page-intro h1 {
+.hero h1,
+.page-intro h1 {
     max-width: 650px;
     margin: 8px 0 18px;
     font-size: clamp(2.7rem, 6vw, 5.5rem);
@@ -124,7 +126,8 @@ body {
     color: var(--blue);
 }
 
-.eyebrow, .post-date {
+.eyebrow,
+.post-date {
     margin: 0;
     color: var(--tomato);
     font: bold .76rem Arial, sans-serif;
@@ -132,7 +135,8 @@ body {
     text-transform: uppercase;
 }
 
-.hero-description, .page-intro > p:not(.eyebrow) {
+.hero-description,
+.page-intro>p:not(.eyebrow) {
     max-width: 540px;
     color: var(--muted);
     font-size: 1.15rem;
@@ -144,7 +148,7 @@ body {
     border-radius: 40% 40% 12px 12px;
     background:
         linear-gradient(135deg, rgba(7, 87, 160, .82), rgba(22, 131, 75, .64)),
-        url('/static/home-hero.png') center/cover;
+        url('./static/home-hero.png') center/cover;
     box-shadow: 18px 18px 0 var(--mustard);
     border: 8px solid rgba(255, 255, 255, .9);
     position: relative;
@@ -200,13 +204,15 @@ body {
     color: var(--blue);
 }
 
-.menu-grid, .posts-grid {
+.menu-grid,
+.posts-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 18px;
 }
 
-.menu-card, .post-card {
+.menu-card,
+.post-card {
     padding: 26px;
     border: 1px solid var(--line);
     background: var(--paper);
@@ -222,13 +228,15 @@ body {
     text-transform: uppercase;
 }
 
-.menu-card h3, .post-card h2 {
+.menu-card h3,
+.post-card h2 {
     margin: 16px 0 8px;
     font-size: 1.5rem;
     color: var(--blue);
 }
 
-.menu-card p, .post-card p {
+.menu-card p,
+.post-card p {
     color: var(--muted);
     line-height: 1.5;
 }
@@ -254,7 +262,7 @@ body {
     font-size: clamp(2rem, 4vw, 3.6rem);
 }
 
-.page-intro > p:not(.eyebrow) {
+.page-intro>p:not(.eyebrow) {
     margin-right: auto;
     margin-left: auto;
     font-size: 1rem;
@@ -469,7 +477,8 @@ body {
     width: 100%;
 }
 
-.voting-card, .confirmation-card {
+.voting-card,
+.confirmation-card {
     background: var(--paper);
     border: 1px solid var(--line);
     border-radius: 12px;
@@ -479,7 +488,8 @@ body {
     box-shadow: 0 4px 6px rgba(45, 33, 27, 0.1);
 }
 
-.voting-card h2, .confirmation-card h2 {
+.voting-card h2,
+.confirmation-card h2 {
     color: var(--blue);
     margin-top: 0;
     font-size: 1.8rem;
@@ -579,14 +589,17 @@ body {
     max-width: 800px;
 }
 
-.queue-image, .banco-image, .urna-background {
+.queue-image,
+.banco-image,
+.urna-background {
     position: absolute;
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.queue-overlay, .banco-form {
+.queue-overlay,
+.banco-form {
     position: absolute;
     inset: 0;
     display: flex;
@@ -657,9 +670,6 @@ body {
 .urna-content {
     position: relative;
     z-index: 10;
-    background: var(--paper);
-    border: 2px solid var(--tomato);
-    border-radius: 12px;
     padding: 32px;
     margin: 0 auto;
     max-width: 900px;
@@ -757,9 +767,7 @@ body {
 }
 
 .urna-display {
-    background: var(--cream);
-    border: 2px solid var(--mustard);
-    border-radius: 8px;
+
     padding: 20px;
     margin-top: 24px;
     text-align: center;
@@ -773,7 +781,8 @@ body {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
-    color: var(--ink);
+    color: white;
+    font-size: 1.5rem;
     font-family: Arial, sans-serif;
 }
 
@@ -958,7 +967,9 @@ body {
 }
 
 @media (max-width: 760px) {
-    .nav-inner, .site-footer {
+
+    .nav-inner,
+    .site-footer {
         align-items: flex-start;
         flex-direction: column;
     }
@@ -969,7 +980,8 @@ body {
         gap: 12px;
     }
 
-    .navbar-item, .nav-order {
+    .navbar-item,
+    .nav-order {
         margin-left: 0;
     }
 
@@ -987,7 +999,8 @@ body {
         box-shadow: 10px 10px 0 var(--mustard);
     }
 
-    .menu-grid, .posts-grid {
+    .menu-grid,
+    .posts-grid {
         grid-template-columns: 1fr;
     }
 
@@ -999,12 +1012,14 @@ body {
         grid-template-columns: 1fr;
     }
 
-    .voting-card, .confirmation-card {
+    .voting-card,
+    .confirmation-card {
         padding: 20px;
         margin: 20px 10px;
     }
 
-    .queue-container, .banco-container {
+    .queue-container,
+    .banco-container {
         height: auto;
         min-height: 300px;
     }

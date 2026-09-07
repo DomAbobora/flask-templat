@@ -1,18 +1,5 @@
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Byte-compiled / optimized / DLL files
-__pycache__/
-
-.pytest_cache/
-
-# Flask stuff:
-instance/
-.webassets-cache
-.vscode/
+/.bundle
+_site/
+.jekyll-cache/
+vendor/
+Gemfile.lock
