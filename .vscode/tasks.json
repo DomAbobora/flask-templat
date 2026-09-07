@@ -4,7 +4,7 @@
     {
       "label": "bundle install",
       "type": "shell",
-      "command": "gem install bundler || true && bundle install",
+      "command": "bundle install",
       "problemMatcher": []
     },
     {

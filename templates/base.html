@@ -51,7 +51,7 @@
                 loading="eager"></iframe>
         </div>
         <script>
-            window.VOTING_API_BASE = 'https://eleicoes-de-gensokyo-2026.onrender.com';
+            window.API_URL = 'https://site-cronicas-api.onrender.com';
             window.backgroundMusicDisabled = {{ 'true' if request.endpoint == 'voting' else 'false' }};
         </script>
         <script src="{{ url_for('static', filename='site.js') }}"></script>

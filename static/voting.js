@@ -6,7 +6,7 @@ if (typeof window.API_URL === 'undefined') {
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  const apiBase = window.VOTING_API_BASE || '';
+  const API_URL = window.API_URL;
   window.backgroundMusicDisabled = true;
 
   const STATIC_PATH = window.STATIC_PATH || './static';
@@ -79,19 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const votoNumero = document.getElementById('votoNumero');
   const nomeRegistro = document.getElementById('nomeRegistro');
   const tokenRegistro = document.getElementById('tokenRegistro');
-  const backgroundAudio = document.getElementById('backgroundAudio');
+  const backgroundAudio = document.getElementById('youtubeAudio');
   const urnaTeclaAudio = document.getElementById('urnaTeclaAudio');
   const urnaVotoAudio = document.getElementById('urnaVotoAudio');
   const candidatePreview = document.getElementById('candidatePreview');
   const voteStage = document.getElementById('voteStage');
   const presidenciaSection = document.getElementById('presidenciaSection');
   const governadorSection = document.getElementById('governadorSection');
-  
-button.addEventListener('click', async () => {
-  const usedTokens = 0; // Ensure the variable is declared and initialized
-  console.log(usedTokens); 
-}); 
-
   let currentVoterData = {};
   let voteStageName = 'presidencia';
   let presidentialVote = '';
@@ -229,7 +223,7 @@ button.addEventListener('click', async () => {
 
       let tokenResponse;
       try {
-        tokenResponse = await fetch(`${apiBase}/api/tokens/validate`, {
+        tokenResponse = await fetch(`${API_URL}/api/tokens/validate`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token }),
@@ -310,7 +304,7 @@ button.addEventListener('click', async () => {
 
       let response;
       try {
-        response = await fetch(`${apiBase}/api/votes`, {
+        response = await fetch(`${API_URL}/api/votes`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

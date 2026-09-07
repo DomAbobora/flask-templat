@@ -6,20 +6,12 @@ if (typeof window.API_URL === 'undefined') {
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-<<<<<<< HEAD
-<<<<<<< HEAD
   const API_URL = window.API_URL;
-=======
-  const apiBase = window.VOTING_API_BASE || '';
->>>>>>> 95bccf5 (taporra kkkkkk)
-=======
-  const apiBase = window.VOTING_API_BASE || '';
->>>>>>> 37bb291b58263f3cc7d885fdee15a40d59cefad8
   const tokenInput = document.getElementById('tokenInput');
   const generateTokenButton = document.getElementById('generateToken');
   const copyTokenButton = document.getElementById('copyToken');
   const voteNumberInput = document.getElementById('votoNumero');
-  const backgroundMedia = document.getElementById('backgroundAudio');
+  const backgroundMedia = document.getElementById('youtubeAudio');
   const muteToggle = document.getElementById('muteToggle');
 
   const sendBackgroundCommand = (action) => {
@@ -64,15 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-<<<<<<< HEAD
-<<<<<<< HEAD
       const response = await fetch(`${API_URL}/api/tokens`, {
-=======
-      const response = await fetch(`${apiBase}/api/tokens`, {
->>>>>>> 95bccf5 (taporra kkkkkk)
-=======
-      const response = await fetch(`${apiBase}/api/tokens`, {
->>>>>>> 37bb291b58263f3cc7d885fdee15a40d59cefad8
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
