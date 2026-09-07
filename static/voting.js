@@ -85,11 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const voteStage = document.getElementById('voteStage');
   const presidenciaSection = document.getElementById('presidenciaSection');
   const governadorSection = document.getElementById('governadorSection');
-  
-button.addEventListener('click', async () => {
-  const usedTokens = 0; // Ensure the variable is declared and initialized
-  console.log(usedTokens); 
-}); 
 
   let currentVoterData = {};
   let voteStageName = 'presidencia';
