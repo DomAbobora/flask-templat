@@ -18,11 +18,13 @@
       },
       "problemMatcher": {
         "owner": "jekyll",
-        "pattern": [],
+        "pattern": {
+          "regexp": "^$"
+        },
         "background": {
           "activeOnStart": true,
           "beginsPattern": ".*",
-          "endsPattern": "Server address: http://"
+          "endsPattern": ".*Server address: http://.*"
         }
       }
     },

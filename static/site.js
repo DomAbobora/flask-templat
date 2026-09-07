@@ -6,7 +6,11 @@ if (typeof window.API_URL === 'undefined') {
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
+<<<<<<< HEAD
   const API_URL = window.API_URL;
+=======
+  const apiBase = window.VOTING_API_BASE || '';
+>>>>>>> 95bccf5 (taporra kkkkkk)
   const tokenInput = document.getElementById('tokenInput');
   const generateTokenButton = document.getElementById('generateToken');
   const copyTokenButton = document.getElementById('copyToken');
@@ -56,7 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
+<<<<<<< HEAD
       const response = await fetch(`${API_URL}/api/tokens`, {
+=======
+      const response = await fetch(`${apiBase}/api/tokens`, {
+>>>>>>> 95bccf5 (taporra kkkkkk)
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

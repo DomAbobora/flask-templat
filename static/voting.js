@@ -6,7 +6,6 @@ if (typeof window.API_URL === 'undefined') {
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-  const API_URL = window.API_URL;
   window.backgroundMusicDisabled = true;
 
   const STATIC_PATH = window.STATIC_PATH || './static';
@@ -197,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Registrar token como válido no servidor
       try {
-        const response = await fetch(`${API_URL}/api/register-token`, {
+        const response = await fetch('/api/register-token', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token }),
@@ -247,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let tokenResponse;
       try {
-        tokenResponse = await fetch(`${API_URL}/api/tokens/validate`, {
+        tokenResponse = await fetch('/api/tokens/validate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token }),
@@ -328,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let response;
       try {
-        response = await fetch(`${API_URL}/api/votes`, {
+        response = await fetch('/api/votes', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

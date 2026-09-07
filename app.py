@@ -16,6 +16,14 @@ app.config["SITE_DESCRIPTION"] = (
 )
 app.config["BLOG_DESCRIPTION"] = "votações eremitas"
 
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    return response
+
 VOTES_FILE = Path(__file__).resolve().parent / "votes.json"
 TOKENS_FILE = Path(__file__).resolve().parent / "tokens.json"
 TOKEN_PATTERN = re.compile(r"^[A-Za-z0-9!@#$%&*]{8,32}$")
