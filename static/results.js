@@ -7,10 +7,14 @@ if (typeof window.API_URL === 'undefined') {
 
 document.addEventListener('DOMContentLoaded', () => {
 <<<<<<< HEAD
+<<<<<<< HEAD
   const API_URL = window.API_URL;
 =======
   const apiBase = window.VOTING_API_BASE || '';
 >>>>>>> 95bccf5 (taporra kkkkkk)
+=======
+  const apiBase = window.VOTING_API_BASE || '';
+>>>>>>> 37bb291b58263f3cc7d885fdee15a40d59cefad8
   const names = {
     presidencia: { 13: 'Suika / Yuugi', 14: 'Miko / Shou', 22: 'Reimu / Marisa' },
     governador: {
@@ -31,10 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const loadResults = async () => {
 <<<<<<< HEAD
+<<<<<<< HEAD
     const response = await fetch(`${API_URL}/api/results`, { cache: 'no-store' });
 =======
     const response = await fetch(`${apiBase}/api/results`, { cache: 'no-store' });
 >>>>>>> 95bccf5 (taporra kkkkkk)
+=======
+    const response = await fetch(`${apiBase}/api/results`, { cache: 'no-store' });
+>>>>>>> 37bb291b58263f3cc7d885fdee15a40d59cefad8
     if (!response.ok) throw new Error('Não foi possível carregar os resultados.');
     const data = await response.json();
     renderOffice(document.getElementById('presidenciaResults'), data.presidencia, 'presidencia');
