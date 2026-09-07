@@ -3,7 +3,7 @@ description:
 # Se este for um GitHub Pages de projeto, ajuste para '/<repo-name>'
 baseurl: "/site-cronicas"
 # URL pública do site (ex: https://usuario.github.io)
-url: "https://hikariium.github.io"
+url: "https://domabobora.github.io"
 theme: minima
 blog_name: Central de Informações
 blog_description: Notícias e atualizações do evento
