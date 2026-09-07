@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const apiBase = window.VOTING_API_BASE || '';
   const tokenInput = document.getElementById('tokenInput');
   const generateTokenButton = document.getElementById('generateToken');
   const copyTokenButton = document.getElementById('copyToken');
@@ -40,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const response = await fetch('/api/tokens', {
+      const response = await fetch(`${apiBase}/api/tokens`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

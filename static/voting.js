@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const apiBase = window.VOTING_API_BASE || '';
   window.backgroundMusicDisabled = true;
 
   // Dados dos candidatos
@@ -176,29 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Registrar token como válido no servidor
-      try {
-        const response = await fetch('/api/register-token', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ token }),
-        });
-
-        if (response.status === 409) {
-          alert('Este token já foi utilizado.');
-          return;
-        }
-
-        if (!response.ok) {
-          const errorData = await response.json();
-          alert(errorData.error || 'Erro ao registrar token.');
-          return;
-        }
-      } catch (error) {
-        alert('Não foi possível conectar ao servidor.');
-        return;
-      }
-
       currentVoterData = { nome, token };
       showSection('fila');
     });
@@ -235,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let tokenResponse;
       try {
-        tokenResponse = await fetch('/api/tokens/validate', {
+        tokenResponse = await fetch(`${apiBase}/api/tokens/validate`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token }),
@@ -301,7 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let response;
       try {
-        response = await fetch('/api/votes', {
+        response = await fetch(`${apiBase}/api/votes`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

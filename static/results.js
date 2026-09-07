@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const apiBase = window.VOTING_API_BASE || '';
   const names = {
     presidencia: { 13: 'Suika / Yuugi', 14: 'Miko / Shou', 22: 'Reimu / Marisa' },
     governador: {
@@ -18,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const loadResults = async () => {
-    const response = await fetch('/api/results', { cache: 'no-store' });
+    const response = await fetch(`${apiBase}/api/results`, { cache: 'no-store' });
     if (!response.ok) throw new Error('Não foi possível carregar os resultados.');
     const data = await response.json();
     renderOffice(document.getElementById('presidenciaResults'), data.presidencia, 'presidencia');
