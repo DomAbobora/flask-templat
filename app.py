@@ -1,4 +1,5 @@
 import json
+import os
 import re
 from collections import Counter
 from datetime import date
@@ -99,7 +100,8 @@ votes_by_office = {
 }
 voted_ips = set()
 issued_tokens = load_tokens_from_disk()
-allowed_test_ips = {"127.0.0.1", "::1", "192.168.5.112"}
+configured_ips = os.getenv("ALLOWED_VOTE_IPS", "127.0.0.1,::1,192.168.5.112")
+allowed_test_ips = {ip.strip() for ip in configured_ips.split(",") if ip.strip()}
 allowed_votes = {
     "presidencia": {"13", "14", "22"},
     "governador": {"1399", "1400", "2222"},
@@ -108,7 +110,18 @@ allowed_votes = {
 
 @app.route("/")
 def home():
-    return render_template("home.html")
+    return jsonify(
+        {
+            "service": "site-cronicas-api",
+            "status": "ok",
+            "message": "API de votação online.",
+        }
+    )
+
+
+@app.get("/health")
+def health():
+    return jsonify({"status": "ok"}), 200
 
 
 @app.route("/about")
